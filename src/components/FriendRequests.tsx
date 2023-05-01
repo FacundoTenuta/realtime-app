@@ -21,7 +21,7 @@ const FriendRequests: FC<FriendRequestsProps> = ({
 	);
 
 	const handleAcceptFriend = async (senderId: string) => {
-		const response = await axios.post('/api/requests/accept', {
+		const response = await axios.post('/api/friends/accept', {
 			id: senderId,
 		});
 
@@ -35,7 +35,7 @@ const FriendRequests: FC<FriendRequestsProps> = ({
 	};
 
 	const handleDeclineFriend = async (senderId: string) => {
-		const response = await axios.post('/api/requests/decline', {
+		const response = await axios.post('/api/friends/decline', {
 			id: senderId,
 		});
 
