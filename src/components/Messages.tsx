@@ -1,17 +1,30 @@
 'use client';
 
 import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
+import Image from 'next/image';
 import { FC, useRef, useState } from 'react';
 
 interface MessagesProps {
 	initialMessages: Message[];
 	sessionId: string;
+	sessionImg: string | null | undefined;
+	chatPartner: User;
 }
 
-const Messages: FC<MessagesProps> = ({ initialMessages, sessionId }) => {
+const Messages: FC<MessagesProps> = ({
+	initialMessages,
+	sessionId,
+	sessionImg,
+	chatPartner,
+}) => {
 	const [messages, setMessages] = useState<Message[]>(initialMessages);
 
 	const scrollDownRef = useRef<HTMLDivElement | null>(null);
+
+	const formatTimestamp = (timestamp: number) => {
+		return format(new Date(timestamp), 'HH:mm');
+	};
 
 	return (
 		<div
@@ -23,7 +36,7 @@ const Messages: FC<MessagesProps> = ({ initialMessages, sessionId }) => {
 			{messages.map((message, index) => {
 				const isCurrentUser = message.senderId === sessionId;
 
-				const hasNextMessageFromUser =
+				const hasNextMessageFromSameUser =
 					messages[index - 1]?.senderId === messages[index].senderId;
 
 				return (
@@ -43,13 +56,31 @@ const Messages: FC<MessagesProps> = ({ initialMessages, sessionId }) => {
 									className={cn('px-4 py-2 rounded-lg inline-block', {
 										'bg-indigo-600 text-white': isCurrentUser,
 										'bg-gray-200 text-gray-900': !isCurrentUser,
-										'rounded-br-none': !hasNextMessageFromUser && isCurrentUser,
-										'rounded-bl-none': !hasNextMessageFromUser && !isCurrentUser,
+										'rounded-br-none': !hasNextMessageFromSameUser && isCurrentUser,
+										'rounded-bl-none': !hasNextMessageFromSameUser && !isCurrentUser,
 									})}
 								>
 									{message.text}{' '}
-									<span className="ml-2 text-xs text-gray-400">{message.timestamp}</span>
+									<span className="ml-2 text-xs text-gray-400">
+										{formatTimestamp(message.timestamp)}
+									</span>
 								</span>
+							</div>
+
+							<div
+								className={cn('relative w-6 h-6', {
+									'order-2': isCurrentUser,
+									'order-1': !isCurrentUser,
+									invisible: hasNextMessageFromSameUser,
+								})}
+							>
+								<Image
+									fill
+									src={isCurrentUser ? (sessionImg as string) : chatPartner.image}
+									alt="profile picture"
+									referrerPolicy="no-referrer"
+									className="rounded-full"
+								/>
 							</div>
 						</div>
 					</div>
