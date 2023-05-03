@@ -15,6 +15,7 @@ const ChatInput: FC<ChatInputProps> = ({ chatPartner, chatId }) => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const sendMessage = async () => {
+		if (!input.trim()) return;
 		setIsLoading(true);
 		try {
 			await axios.post('/api/messages/send', { text: input, chatId });
