@@ -7,7 +7,6 @@ import { messageArrayValidator } from '@/lib/validations/message';
 import { getServerSession } from 'next-auth';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { FC } from 'react';
 
 interface pageProps {
 	params: {
@@ -36,7 +35,7 @@ async function getChatMessages(chatId: string) {
 	}
 }
 
-const page = async ({ params }: pageProps) => {
+const Page = async ({ params }: pageProps) => {
 	const { chatId } = params;
 
 	const session = await getServerSession(authOptions);
@@ -93,4 +92,4 @@ const page = async ({ params }: pageProps) => {
 	);
 };
 
-export default page;
+export default Page;
