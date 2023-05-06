@@ -48,7 +48,7 @@ const FriendRequests: FC<FriendRequestsProps> = ({
 			);
 			pusherClient.unbind('incoming_friend_requests', friendRequestHandler);
 		};
-	}, []);
+	}, [sessionId]);
 
 	const handleAcceptFriend = async (senderId: string) => {
 		const response = await axios.post('/api/friends/accept', {
